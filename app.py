@@ -177,7 +177,7 @@ def crear_credencial():
                 ventasrealizadas, prodmasvendidos, productos, pedidos) 
                 VALUES 
                 (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""", 
-                ('Admin', '#005919', hashed_password, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+                ('Admin', '#005919', hashed_password, True, True, True, True, True, True, True, True, True, True)
             )
             connection.commit()
 
