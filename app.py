@@ -177,7 +177,7 @@ def crear_credencial():
                 ventasrealizadas, prodmasvendidos, productos, pedidos) 
                 VALUES 
                 (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""", 
-                ('Admin', '#005919', hashed_password, True, True, True, True, True, True, True, True, True, True)
+                ('Admin', '#005919', hashed_password, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
             )
             connection.commit()
 
@@ -800,9 +800,6 @@ def gestionar_credenciales():
 
 @app.route('/crear_credencial', methods=['POST'])
 def crear_credencial():
-    from flask import request, redirect, url_for
-    import bcrypt
-
     nombre = request.form.get("nombre")
     color = request.form.get("color")
     password = request.form.get("password")
