@@ -68,14 +68,15 @@
     
                                 <h5>Permisos</h5>
                                 <div class="row">
-                                    {% for permiso in ["empleados", "usuarios", "banners", "categorias", "promociones", "historial", "productos", "ventasRealizadas", "prodMasVendidos", "pedidos"] %}
+                                    {% for permiso in ["usuarios", "permisos", "banners", "categorias", "promociones", "historial", "productos", "ventasRealizadas", "prodMasVendidos", "pedidos"] %}
                                     <div class="col-md-6">
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" name="{{ permiso }}">
-                                            <label class="form-check-label">{{ permiso | replace('_', ' ') | title }}</label>
+                                            <input class="form-check-input" type="checkbox" name="{{ permiso }}" id="{{ permiso }}">
+                                            <label class="form-check-label" for="{{ permiso }}">{{ permiso | capitalize }}</label>
                                         </div>
                                     </div>
                                     {% endfor %}
+
                                 </div>
     
                                 <button type="submit" class="btn btn-primary mt-3">Crear Credencial</button>
