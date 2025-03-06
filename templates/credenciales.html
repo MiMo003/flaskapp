@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Credenciales</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('config') }}">Configuración de la Web</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link active home" aria-current="page" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button onclick="salir()" class="btn btn-danger">Salir</button>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <section style="margin-top: 10%;">
+        <div class="container mt-4">
+            <h2 class="text-center">Gestión de Credenciales</h2>
+    
+            {% if mensaje %}
+                <div class="alert alert-success">{{ mensaje }}</div>
+            {% elif error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+    
+            <!-- Crear nueva credencial -->
+            <div class="accordion" id="accordionCrear">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#crearCredencial">
+                            Crear Nueva Credencial
+                        </button>
+                    </h2>
+                    <div id="crearCredencial" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <form action="{{ url_for('crear_credencial') }}" method="POST">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre de la Credencial</label>
+                                    <input type="text" class="form-control" name="nombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Selecciona un Color</label>
+                                    <input type="color" class="form-control form-control-color" name="color">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contraseña</label>
+                                    <input type="text" class="form-control" name="password" required>
+                                </div>
+    
+                                <h5>Permisos</h5>
+                                <div class="row">
+                                    {% for permiso in ["empleados", "usuarios", "banners", "categorias", "promociones", "historial", "productos", "ventasRealizadas", "prodMasVendidos", "pedidos"] %}
+                                    <div class="col-md-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" name="{{ permiso }}">
+                                            <label class="form-check-label">{{ permiso | replace('_', ' ') | title }}</label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+    
+                                <button type="submit" class="btn btn-primary mt-3">Crear Credencial</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Lista de credenciales existentes -->
+            <h3 class="mt-4">Credenciales Existentes</h3>
+            <div class="accordion" id="accordionCredenciales">
+                {% for credencial in credenciales %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#credencial{{ credencial.id }}">
+                            {{ credencial.nombre }}
+                        </button>
+                    </h2>
+                    <div id="credencial{{ credencial.id }}" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <form action="{{ url_for('editar_credencial', id=credencial.id) }}" method="POST">
+                                <div class="mb-3">
+                                    <label class="form-label">Ingresar una Nueva Contraseña</label>
+                                    <input type="text" class="form-control" name="password" value="">
+                                </div>
+    
+                                <h5>Permisos</h5>
+                                <div class="row">
+                                    {% for permiso in ["usuarios", "permisos", "banners", "categorias", "promociones", "historial", "ventasRealizadas", "prodMasVendidos", "productos", "pedidos"] %}
+                                    <div class="col-md-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" name="{{ permiso }}" {% if credencial[permiso] %}checked{% endif %}>
+                                            <label class="form-check-label">{{ permiso | replace('_', ' ') | title }}</label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+    
+                                <button type="submit" class="btn btn-success mt-3">Guardar Cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    
+        </div>
+      </section>
+    
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/session.js"></script>
+    <script>
+        window.onload = verificarAcceso; // Bloquea la página si no hay sesión activa
+    </script>
+</body>
+</html>

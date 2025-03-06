@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración de Productos</title>
+
+  <!-- Incluyendo el CSS de Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../static/stylesConfig.css">
+
+
+  <style>
+    #preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .image-container {
+        position: relative;
+        display: inline-block;
+    }
+    .image-container img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+    }
+</style>
+  <!-- Estilo para la zona de arrastre de imagen -->
+  <style>
+    .drag-area {
+      width: 100%;
+      height: 200px;
+      border: 2px dashed #007bff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    .drag-area.hover {
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+    .drag-area img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .file-input {
+      display: none;
+    }
+
+    /* Estilo para las imágenes en la tabla */
+    .product-image {
+      width: 100px; /* Ajustar el tamaño según se necesite */
+      height: 100px;
+      object-fit: cover; /* Para que la imagen se ajuste proporcionalmente */
+      border-radius: 8px; /* Opcional: bordes redondeados */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('config') }}">Configuración de la Web</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active home" aria-current="page" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button onclick="salir()" class="btn btn-danger">Salir</button>
+          </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- Contenido Principal -->
+  <div class="container mt-5">
+    <h2>Configuración de Productos</h2>
+
+    <!-- Botón para abrir el modal -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto">
+      Agregar Nuevo Producto
+    </button>
+
+    <!-- Modal para agregar un nuevo producto -->
+    <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-labelledby="modalNuevoProductoLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalNuevoProductoLabel">Nuevo Producto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Formulario dentro del modal -->
+            <form action="/agregar_producto" method="POST" enctype="multipart/form-data">
+
+              <input type="hidden" name="categoria" value="Producto">
+
+              <input type="hidden" name="accion" value="Creación">
+
+              <input type="hidden" name="categoriaM" value="Modelo">
+
+              <input type="hidden" name="accionM" value="Creación">
+              <!-- Nombre del Producto -->
+              <div class="mb-3">
+                <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" required>
+              </div>
+            
+              <!-- Código del Producto -->
+              <div class="mb-3">
+                <label for="codigoProducto" class="form-label">Código del Producto</label>
+                <input type="text" class="form-control" id="codigoProducto" name="codigoProducto">
+              </div>
+            
+              <!-- Descripción del Producto -->
+              <div class="mb-3">
+                <label for="descripcionProducto" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcionProducto" name="descripcionProducto" rows="3" required></textarea>
+              </div>
+
+              <!-- Clase del Producto -->
+              <div class="mb-3">
+                <label for="categoriaSub" class="form-label">Seleccionar Categoría</label>
+                <select class="form-control" id="categoriaSub" name="categoriaSub" required>
+                  <option value="" disabled selected>Seleccione una categoría</option>
+                  {% for categoria in subCat %}
+                    <option value="{{ categoria.id }}">{{ categoria.categoria_nombre }} : {{ categoria.nombre }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <!-- Precio de Venta -->
+              <div class="mb-3">
+                <label for="precioProducto" class="form-label">Precio de Venta</label>
+                <input type="number" class="form-control" id="precioProducto" name="precioProducto" step="0.01" required>
+              </div>
+
+              <!-- Fecha de Alta -->
+              <div class="mb-3">
+                <label for="fechaAlta" class="form-label">Fecha de Alta</label>
+                <input type="date" class="form-control" id="fechaAlta" name="fechaAlta">
+              </div>
+              
+              <!-- Nombre del Primer Modelo -->
+              <div class="mb-3">
+                <label for="modeloProducto" class="form-label">Ingresar un Primer Modelo</label>
+                <input type="text" class="form-control" id="modeloProducto" name="modeloProducto" required>
+              </div>
+            
+              <!-- Imagen del Producto - Arrastrar o seleccionar archivo -->
+              <div class="mb-3">
+                <label for="imagenProducto">Selecciona una imagen:</label><br>
+                <input type="file" id="imagenProducto" name="imagenProducto" accept="image/*" required><br><br>
+              </div>
+            
+              <!-- Origen del Producto -->
+              <div class="mb-3">
+                <label for="origenProducto" class="form-label">Origen del Producto</label>
+                <input type="text" class="form-control" id="origenProducto" name="origenProducto" value="China">
+              </div>
+            
+              <!-- Unidad de Venta -->
+              <div class="mb-3">
+                <label for="unidadVenta" class="form-label">Unidades disponibles del Modelo</label>
+                <input type="number" class="form-control" id="unidadVenta" name="unidadVenta" value="unidadVenta">
+              </div>
+            
+              <button type="submit" class="btn btn-primary">Agregar Producto</button>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Nuevo Botón para abrir el modal del carrusel -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCarrusel">
+      Agregar Nueva Categoria
+    </button>
+
+    <div class="modal fade" id="modalCarrusel"  aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCarruselLabel">Crear Categorias</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Carrusel -->
+            <div id="carouselExample" class="carousel slide" data-bs-ride="false"> <!-- Desactivar cambio automático -->
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="mb-3">
+                    <form method="POST" action="{{ url_for('agregar_categoria') }}">
+                      
+                      <input type="hidden" name="categoriaC" value="Categoria">
+              
+                      <input type="hidden" name="accionC" value="Creación">
+
+                      <label for="categoriaNombre" class="form-label">Nueva Categoría</label>
+                      <input type="text" class="form-control" id="categoriaNombre" name="categoriaNombre" placeholder="Nombre de la categoría" required>
+                      <button type="submit" class="btn btn-primary" style="margin-left: 30%;">Agregar Categoría</button>
+                    </form>                
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="mb-3">
+                    <form method="POST" action="{{ url_for('agregar_subCategoria') }}">
+
+                      <input type="hidden" name="categoriaSC" value="Sub Categoría">
+              
+                      <input type="hidden" name="accionSC" value="Creación">
+
+                      <label for="subCat" class="form-label">Nueva SubCategoría</label>
+                      <input type="text" class="form-control" id="subCat" name="subCat" placeholder="Nombre..." required>
+                
+                      <label for="categoriaSub" class="form-label">Seleccionar Categoría</label>
+                      <select class="form-control" id="categoriaSub" name="categoriaSub" required>
+                        <option value="" disabled selected>Seleccione una categoría</option>
+                        {% for categoria in categorias %}
+                          <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                        {% endfor %}
+                      </select>
+                      <button type="submit" class="btn btn-primary" style="margin-left: 40%;">Agregar</button>
+                    </form>
+                  </div>
+                </div>
+                
+              </div>
+              <!-- Flechas de navegación -->
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <h4>Productos Existentes</h4>
+
+    <!-- Tabla de productos -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Referencia</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Codigo</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Precio x Unidad</th>
+          <th scope="col">Fecha de Ingreso</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if productos %}
+          {% for producto in productos %}
+            <tr>
+              <td>
+                <!-- Mostrar la imagen del producto con el nuevo alias -->
+                <img src="{{ producto.imagen_url or 'ruta_por_defecto.jpg' }}" alt="Producto" style="width: 100px;">
+              </td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.cod }}</td>
+              <td>{{ producto.descripcion }}</td>
+              <td>${{ producto.precioVenta }}</td>
+              <td>{{ producto.fechaAlta }}</td>
+              <td>
+                <!-- Botón de eliminación -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ producto.id }}" onclick="loadDeleteData('{{ producto.id }}', '{{ producto.nombre }}')">
+                  Eliminar
+                </button>
+    
+                <!-- Modal de eliminación -->
+                <div class="modal fade" id="deleteModal{{ producto.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ producto.id }}" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ producto.id }}">Eliminar Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{{ url_for('eliminar_producto', producto_id=producto.id) }}" method="POST">
+
+                          <input type="hidden" name="categoria" value="Producto">
+              
+                          <input type="hidden" name="accion" value="Eliminación">
+
+                          <input type="hidden" name="nombre" value="{{ producto.nombre }}">
+
+                          <input type="hidden" name="producto" id="deleteProducto{{ producto.id }}" value="{{ producto.nombre }}">
+                          
+                          <div class="mb-3">
+                            <label for="deleteMotivo{{ producto.id }}" class="form-label">Motivo de la eliminación</label>
+                            <textarea class="form-control" id="deleteMotivo{{ producto.id }}" name="motivo" rows="3" required></textarea>
+                          </div>
+                          
+                          <button type="submit" class="btn btn-danger">Eliminar Producto</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    
+                <a class="btn btn-warning" href="{{ url_for('modelos', id=producto.id, nombre=producto.nombre) }}">Editar</a>
+
+
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="8" class="text-center">No hay productos existentes.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+    
+            </div>
+
+            <!-- Incluyendo los scripts de Bootstrap -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="../static/session.js"></script>
+            <script>
+                window.onload = verificarAcceso; // Bloquea la página si no hay sesión activa
+            </script>
+
+            <!-- Script para cargar los datos del producto en el modal de edición -->
+            <script>
+            function loadProductData(id, nombre, precio) {
+                document.getElementById('editIdArticulo').value = id;
+                document.getElementById('editPrecioVenta').value = precio;
+                document.getElementById('editMotivo').value = '';
+            }
+            </script>
+
+            <!-- Script para la funcionalidad de arrastrar y soltar -->
+            <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const dragArea = document.getElementById('dragArea');
+                const fileInput = document.getElementById('imagenProducto');
+
+                if (dragArea && fileInput) {
+                    // Mostrar el área de arrastre cuando el archivo es arrastrado
+                    dragArea.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        dragArea.classList.add('hover');
+                    });
+
+                    dragArea.addEventListener('dragleave', () => {
+                        dragArea.classList.remove('hover');
+                    });
+
+                    // Al soltar el archivo, se selecciona automáticamente
+                    dragArea.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        dragArea.classList.remove('hover');
+                        const files = e.dataTransfer.files;
+                        if (files.length > 0) {
+                            fileInput.files = files;
+                            dragArea.querySelector('span').innerText = 'Imagen cargada. Haz clic para cambiar.';
+                        }
+                    });
+
+                    // Abrir el selector de archivo si el área de arrastre es clickeada
+                    dragArea.addEventListener('click', () => {
+                        fileInput.click();
+                    });
+
+                    // Actualizar el texto cuando se seleccione un archivo
+                    fileInput.addEventListener('change', () => {
+                        if (fileInput.files.length > 0) {
+                            dragArea.querySelector('span').innerText = 'Imagen cargada. Haz clic para cambiar.';
+                        }
+                    });
+                }
+            });
+            </script>
+
+            </body>
+            </html>
+
+         

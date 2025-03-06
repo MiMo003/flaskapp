@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="es">
+    <head>
+        <!-- Basic Page Needs -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Ylaia Blanqueria</title>
+    
+        <meta name="keywords" content="Tanchic, Bijouterie, Mayorista de Once, mayorista">
+        <meta name="description" content="Tanchic Bijouterie - Articulos de bijouterie de moda">
+        <meta name="author" content="Alicia Ayma">
+        <link rel="shortcut icon" href="#" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="#" />
+    
+        <!-- Mobile Meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700" rel="stylesheet">
+    
+        <!-- Vendor CSS -->
+        <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="libs/font-material/css/material-design-iconic-font.min.css">
+        <link rel="stylesheet" href="libs/nivo-slider/css/nivo-slider.css">
+        <link rel="stylesheet" href="libs/nivo-slider/css/animate.css">
+        <link rel="stylesheet" href="libs/nivo-slider/css/style.css">
+        <link rel="stylesheet" href="libs/owl-carousel/assets/owl.carousel.min.css">
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../static/styles.css">
+        <!-- Template CSS 
+        <link rel="stylesheet" type="text/css" href="css2/style.css">
+        <link rel="stylesheet" type="text/css" href="css2/reponsive.css">-->
+    
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="libreria/funciones.js" type="text/JavaScript"> </script>
+        
+        
+        <style>
+            .accordion-body a {
+                margin: 0;
+                padding: 0;
+                line-height: 1.5; /* Ajustar según sea necesario */
+            }
+            
+        </style>
+        
+    </head>
+
+<body id="home">
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <!-- Botón para abrir el modal -->
+                <button id="openModalBtn" class="btn btn-outline-warning">Catálogo</button>
+
+                <!-- Modal -->
+                <div id="sideModal" class="side-modal">
+                    <div class="side-modal-content">
+                        <button class="close-modal-btn" id="closeModalBtn">&times;</button>
+                        <h2>Catálogo</h2>
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            {% for categoria_id, categoria in categorias.items() %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#flush-collapse{{ categoria_id }}" aria-expanded="false" 
+                                        aria-controls="flush-collapse{{ categoria_id }}">
+                                        {{ categoria.nombre }}
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse{{ categoria_id }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <ul>
+                                            {% for sub in categoria.subcategorias|sort(attribute='nombre') %}
+                                            <a href="{{ url_for('catalogo', subclase=sub.id) }}" class="catalogo">{{ sub.nombre }}</a><br>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fondo oscuro (overlay) para el modal -->
+                <div id="modalOverlay" class="modal-overlay"></div>
+
+
+
+                
+              <img src="../static/img/icon/logo-mobie.png" alt="Logo" width="30" height="24" class="logo">
+              </a>
+              <div class="row encabezado">
+                <div class="col"><a class="nav-link active otheroptions1 cursor" href="{{ url_for('index') }}">Home</a></div>
+                
+                <!-- F.A.Q Dropdown -->
+                <div class="col dropdown">
+                    <a class="nav-link otheroptions4 cursor1 cursor dropdown-toggle" href="#" id="faqDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        F.A.Q
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="faqDropdown">
+                        <li><h6>Preguntas Frecuentes</h6></li>
+                        <li><a class="dropdown-item" href="{{ url_for('fqa') }}"><img src="../static/img/icon/contact_mess.png" alt=""></a></li>
+                    </ul>
+                </div>
+              </div>
+            
+            
+              
+                <button class="carrito-btn d-flex align-items-center carrito">
+                    <a href="{{ url_for('carrito') }}"><img src="../static/img/icon/cart.png" alt="Carrito" width="20" height="20" class="cart-icon"></a>
+                    <span class="cart-number" style="color: brown;"><strong>Carrito</strong></span>
+                </button>
+            </div>
+            
+          </nav>
+    </header>
+
+    <section class="margen">
+
+        <div class="row">
+            <div class="col">
+                <h1>Preguntas Frecuentes</h1>
+                <h3>COMPRA MINIMA $:</h3>
+                <h5 class="margenh5">Local Comercial $ 5000 pesos</h5>
+                <h5 class="margenh5">Página Web $ 15000 pesos</h5>
+                <h3>¿LOS PRECIOS INCLUYEN IVA?</h3>
+                <h5 class="margenh5">Incluido IVA</h5>
+                <h3>CUENTA BANCARIA</h3>
+                <h5 class="margenh5">Caja Ahorro Pesos - BANCO MACRO</h5>
+                <h5 class="margenh5">Sucursal: 000 Número de Cuenta: 088-4341785/</h5>
+                <h5 class="margenh5">CBU: 0230044498000037411546</h5>
+                <h5 class="margenh5">Titular: ALICIA AYMA</h5>
+                <h5 class="margenh5">Capital Federal - Argentina</h5>
+                <h3>ACREDITACIÓN DE PAGOS</h3>
+                <h5 class="margenh5">Los depósitos y transferencias bancarias se acreditan de 24-48 horas. El pago puede ser realizado por pagofacil y rapipago.</h5>
+                <h3>ENVÍO DE ENCOMIENDA</h3>
+                <h5 class="margenh5">Su pedido será atendido dentro de las 24-48 horas de dar aviso del pago correspondiente. El transportista es elegido por el cliente durante el proceso de compra. Los gastos por el envío de la encomienda es por cuenta del cliente.</h5>
+                <h3>ACERCA DEL PEDIDO</h3>
+                <h5 class="margenh5">Ante eventuales faltantes de stock Ud. será avisado para modificar su pedido con su consentimiento. La empresa se reserva el derecho de cambiar la sugerencia del cliente en caso de no contar con el color o diseño.</h5>
+                <h3>NUESTROS LOCALES</h3>
+                <h5 class="margenh5">Sucursal: Bartolome mitre 2711 CABA</h5>
+                <h5 class="margenh5">Teléfono: 11 5884-6204</h5>
+                <h3>AVISO DE PAGO</h3>
+                <h5 class="margenh5" style="color: #e01952;">ventas@tanchic.com.ar o WhatsApp +5491128593500</h5>
+                
+            </div>
+            <div class="col"><img class="bannerV" src="../static/img/stock/liso.webp" alt="" style="height: 1500px;"></div>
+        </div>
+
+        
+    </section>
+
+    <footer>
+        <div class="row">
+            <div class="col margin1">
+                <img src="../static/img/icon/logo-mobie.png" alt="">
+                <p class="psize">
+                    Somos una tienda de bijouterie que ofrecemos accesorios de moda de buena calidad y a buen precio. accesorios de temporada, acero, cosméticos, carteras, mochilas gorros, guantes,etc Realizamos envíos a todo el interior del país, con total seriedad y garantía. Ofrecemos precios y descuentos especiales para revendedores y mayoristas. Lo invitamos cordialmente a visitarnos y disfrutar de nuestra atención personalizada.
+                </p>
+                <a href="" class="link">Sobre Nosotros</a><br>
+                <a href="" class="link">Contáctenos</a><br>
+                <a href="" class="link">Cómo comprar</a><br>
+                <a href="" class="link">Políticas de Privacidad</a><br>
+                <a href="" class="link">Métodos de Pago</a><br>
+
+                <img src="../static/img/icon/payment-footer.png" alt="" class="finalfoot">
+            </div>
+            <div class="col margin2">
+                <h5>Contacto</h5>
+                <div style="margin-top: 3%;"><img src="../static/img/icon/footer-icon2.png" alt="" style="width: 2%; margin-top: 3%; margin-top: 0%;"><strong>Direccion:</strong></img></div>
+                <p class="pconfig">Bartolome mitre 2711,Once, CABA, Argentina</p>
+                <div><img src="../static/img/icon/footer-icon3.png" alt="" style="width: 2%;"><strong>Email:</strong></img></div>
+                <p class="pconfig">ventas@tanchic.com.ar</p>
+                <div><img src="../static/img/icon/footer-icon1.png" alt="" style="width: 2%;"><strong>Telefono:</strong></img></div>
+                <p class="pconfig">11-5884-6204</p>
+                <div><img src="../static/img/icon/visitante.png" alt="" style="width: 2%;"><strong>Horarios:</strong></img></div>
+                <p class="pconfig">Lunes - Sabado / 09.00AM - 18.00</p>
+                <p class="pconfig">(Consultar Días Feriados)</p>
+            </div>
+            <div class="col margin3">
+                <h5>Novedades</h5>
+                <p style="width: 40%; margin-top: 3%;" class="psize">Suscríbase a nuestras Novedades para recibir los últimos artículos y novedades directamente.</p>
+                <form class="d-flex" role="search" style="width: 40%;">
+                    <input class="form-control me-2" type="search" placeholder="Ingresa tu mail" aria-label="Search" style="border-radius: 10cap;">
+                    <button class="btn btn-outline-danger" type="submit">Suscribirse</button>
+                </form>
+                <h5 style="margin-top: 5%;">Redes Sociales</h5>
+                <div class="row" style="width: 350px;">
+                    <div class="col"><button type="button" class="btn btn-danger"><img src="../static/img/icon/facebook.png" alt="" style="width: 30px; height: 30px;"></button></div>
+                    <div class="col"><button type="button" class="btn btn-danger"><img src="../static/img/icon/instagram.png" alt="" style="width: 30px; height: 30px; margin-left: -l0;"></button></div>
+                    <div class="col"><button type="button" class="btn btn-danger"><img src="../static/img/icon/google.png" alt="" style="width: 30px; height: 30px;"></button></div>
+                </div>
+                <h5 style="margin-top: 4%;">Metodos de Pago</h5>
+                <img src="../static/img/icon/payment.png" alt="">
+            </div>
+        </div>
+    </footer>
+    </body>
+    <!-- Vendor JS -->
+    <script src="libs/jquery/jquery.min.js"></script>
+    <script src="libs/popper/popper.min.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="libs/nivo-slider/js/jquery.nivo.slider.js"></script>
+    <script src="libs/owl-carousel/owl.carousel.min.js"></script>
+
+    <!-- Template JS -->
+    <script src="js2/theme.js"></script>
+    <script src="../static/script.js"></script>
+</html>

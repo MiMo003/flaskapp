@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingresar Datos de la Empresa</title>
+
+  <!-- Incluyendo el CSS de Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .form-container .btn-submit {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+    <header>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{{ url_for('config') }}">Configuración de la Web</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active home" aria-current="page" href="{{ url_for('index') }}">Home</a>
+              </li>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button onclick="salir()" class="btn btn-danger">Salir</button>
+            </div>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+  <div class="container mt-5">
+    <div class="form-container">
+      <h2>Ingresar Datos de la Empresa</h2>
+      
+      <!-- Formulario -->
+      <form action="/datos" method="POST">
+    
+        <!-- Número de Teléfono -->
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Número de Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ej: +54 9 1123456789" required pattern="^\+?(\d{1,4})\s?(\d{1,4})\s?(\d{4,10})$"
+            value="{{ all_data[0]['telefono'] if all_data and all_data|length > 0 else '' }}">
+            <div class="form-text">Por favor, ingresa tu número de teléfono.</div>
+        </div>
+    
+        <!-- Titular de Cuenta Bancaria -->
+        <div class="mb-3">
+            <label for="titular" class="form-label">Titular de Cuenta Bancaria</label>
+            <input type="text" class="form-control" id="titular" name="titular" placeholder="Ej: Juan Pérez" required
+            value="{{ all_data[0]['titular'] if all_data and all_data|length > 0 else '' }}">
+            <div class="form-text">Ingresa el nombre completo del titular de la cuenta bancaria.</div>
+        </div>
+    
+        <!-- Alias -->
+        <div class="mb-3">
+            <label for="alias" class="form-label">Alias de la Cuenta Bancaria</label>
+            <input type="text" class="form-control" id="alias" name="alias" placeholder="Ej: AliasCuenta2025" required
+            value="{{ all_data[0]['aliasCbu'] if all_data and all_data|length > 0 else '' }}">
+            <div class="form-text">Escribe el alias de la cuenta bancaria.</div>
+        </div>
+    
+        <!-- CBU -->
+        <div class="mb-3">
+            <label for="cbu" class="form-label">CBU (Clave Bancaria Uniforme)</label>
+            <input type="text" class="form-control" id="cbu" name="cbu" placeholder="Ej: 0200401980071705152871" required pattern="^\d{22}$"
+            value="{{ all_data[0]['cbu'] if all_data and all_data|length > 0 else '' }}">
+            <div class="form-text">Ingresa el CBU de tu cuenta bancaria (22 dígitos).</div>
+        </div>
+    
+        <!-- Botón de Enviar -->
+        <button type="submit" class="btn btn-primary btn-submit">Enviar</button>
+    
+    </form>
+    
+    
+    </div>
+  </div>
+
+  <!-- Incluyendo los scripts de Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/session.js"></script>
+    <script>
+        window.onload = verificarAcceso; // Bloquea la página si no hay sesión activa
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+/*Estilos pie de pagina*/
+
+footer{
+    background-color: #e9e9e9;
+    margin-top: 10%;
+}
+
+.margin1{
+    margin-top: 3%;
+    margin-left: 18%;
+}
+
+.margin2{
+    margin-top: 3%;
+    margin-left: -20%;
+}
+
+.margin3{
+    margin-top: 3%;
+    margin-left: -25%;
+}
+
+.link {
+    text-decoration: none; 
+    color: #747474; 
+    transition: color 0.3s ease; 
+  }
+  
+
+.link:hover {
+    color: #000000;
+}
+  
+.cursor{
+    text-decoration: none; 
+    transition: color 0.3s ease; 
+    margin-left: -30%;
+}
+
+.cursor1{
+    margin-top: 65%;
+}
+
+.cursor:hover {
+    color: hsl(56, 100%, 63%);
+  }
+
+  .psize{
+    width: 40%;
+    text-align: justify;
+    margin-top: 3%;
+    color: #747474;
+}
+
+.finalfoot{
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+
+/*Estilos del contenido*/
+
+
+section{
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+.marginrow{
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+button{
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+.configbutton{
+    background-color: #000000;
+    color: #e9e9e9;
+    text-decoration: none; 
+    transition: color 0.3s ease; 
+}
+
+.configbutton:hover{
+    background-color: #941111;
+    color: #000000;
+}
+
+.img{
+    width: 10%;
+}
+
+td{
+    margin-top: 30px;
+}
+
+.home{
+    margin-left: 600px;
+}
+
+.ingreso{
+    margin-left: 800px;
+}
+

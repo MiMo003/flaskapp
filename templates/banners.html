@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banners</title>
+</head>
+<body>
+    <h1>Gestión de Banners</h1>
+    <a href="{{ url_for('agregar_banner') }}">Agregar Nuevo Banner</a>
+
+    {% if banners %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Carrusel 1</th>
+                    <th>Carrusel 2</th>
+                    <th>Carrusel 3</th>
+                    <th>Banner</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for banner in banners %}
+                    <tr>
+                        <td>{{ banner.id }}</td>
+                        <td>{{ banner.carrusel1 }}</td>
+                        <td>{{ banner.carrusel2 }}</td>
+                        <td>{{ banner.carrusel3 }}</td>
+                        <td>{{ banner.banner }}</td>
+                        <td>
+                            <a href="{{ url_for('editar_banner', id=banner.id) }}">Editar</a>
+                            <form action="{{ url_for('eliminar_banner', id=banner.id) }}" method="POST" style="display:inline;">
+                                <button type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay banners registrados.</p>
+    {% endif %}
+</body>
+</html>

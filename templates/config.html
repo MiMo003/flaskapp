@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Metadatos básicos -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tanchic Bijouterie - Mayorista de bijouterie en ONCE</title>
+    <meta name="keywords" content="Tanchic, Bijouterie, Mayorista de Once, mayorista">
+    <meta name="description" content="Tanchic Bijouterie - Articulos de bijouterie de moda">
+    <meta name="author" content="Alicia Ayma">
+    <link rel="shortcut icon" href="#" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="#" />
+
+    <!-- Meta para dispositivos móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700" rel="stylesheet">
+
+    <!-- Archivos CSS de bibliotecas externas -->
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="libs/font-material/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="libs/nivo-slider/css/nivo-slider.css">
+    <link rel="stylesheet" href="libs/nivo-slider/css/animate.css">
+    <link rel="stylesheet" href="libs/nivo-slider/css/style.css">
+    <link rel="stylesheet" href="libs/owl-carousel/assets/owl.carousel.min.css">
+    
+    <!-- Bootstrap (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- JavaScript de Bootstrap (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../static/stylesConfig.css">
+
+    <!-- Scripts JavaScript -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="libreria/funciones.js" type="text/JavaScript"> </script>
+</head>
+
+<body id="home">
+    <!-- Header -->
+    <header>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{{ url_for('config') }}">Configuración de la Web</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active home" aria-current="page" href="{{ url_for('index') }}">Home</a>
+              </li>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button onclick="salir()" class="btn btn-danger">Salir</button>
+            </div>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section>
+      <div class="row marginrow">
+          <div class="col">
+              <div class="card-body">
+                  <!-- Tabla de Movimientos -->
+                  <table class="table">
+                      <tbody>
+                          <!-- Movimiento 1 -->
+                          {% if credencial.usuarios %}
+                          <tr>
+                              <td><img src="../static/img/icon/userbase.webp" alt="" class="img"></td>
+                              <td>Empleados</td>
+                              <td>
+                                  <!-- Button trigger modal -->
+                                  <a href="{{ url_for('pronto') }}" class="btn btn-success">Ver</a>
+                          </tr>
+                          {% endif %}
+                          
+                          {% if credencial.permisos %}
+                          <tr>
+                              <td><img src="../static/img/icon/userbase.webp" alt="" class="img"></td>
+                              <td>Permisos</td>
+                              <td>
+                                  <!-- Button trigger modal -->
+                                  <a href="{{ url_for('gestionar_credenciales') }}" class="btn btn-success">Ver</a>
+                          </tr>   
+                          {% endif %}
+                          
+                          {% if credencial.banners %}
+                          <tr>
+                              <td><img src="../static/img/icon/img.png" alt="" class="img"></td>
+                              <td>Banners</td>
+                              <td>
+                                  <!-- Button trigger modal -->
+                                  <a href="{{ url_for('banners') }}" class="btn btn-success">Ver</a>
+                                  
+                                  <!-- Modal -->
+                                  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                          ...
+                                          </div>
+                                          <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                          <button type="button" class="btn btn-primary">Understood</button>
+                                          </div>
+                                      </div>
+                                      </div>
+                                  </div>
+                          </td>
+                          {% endif %}
+                          
+                          {% if credencial.categorias %}
+                          <tr>
+                              <td><img src="../static/img/icon/categorias.png" alt="" class="img"></td>
+                              <td>Categorias</td>
+                              <td>
+                                <a href="{{ url_for('banners') }}" class="btn btn-success">Ver</a>
+                          </td>
+                          {% endif %}
+                          
+                          {% if credencial.promociones %}
+                          <tr>
+                              <td><img src="../static/img/icon/promo.webp" alt="" class="img"></td>
+                              <td>Promociones</td>
+                              <td>
+                                <a href="{{ url_for('banners') }}" class="btn btn-success">Ver</a>
+                          </td>
+                          {% endif %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          {% if credencial.historial %}
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5>Historial de Movimientos</h5>
+        
+              <!-- Tabla de Movimientos -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ID Usuario</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Acción</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Rol</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for item in datos_backupprecioventa %}
+                    <tr class="action-item">
+                      <td>{{ item.usuario }}</td>
+                      <td>{{ item.nombreUser }}</td>
+                      <td>{{ item.mailUser }}</td>
+                        <td>
+                          <ul class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              {{ item.accion }}
+                            </a>
+                            <ul class="dropdown-menu">
+                              <li><p class="" href="#" style="max-width: 10000px;">{{ item.motivo }}</p></li>
+                            </ul>
+                          </ul>
+                        </td>
+                      <td>{{ item.categoria }}</td>
+                      <td>{{ item.fechaCambio }}</td>
+                      <td>{{ item.credencial }}</td>
+                    </tr>
+                  {% else %}
+                    <tr>
+                      <td colspan="5">No hay movimientos registrados.</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        
+              <!-- Botón Ver más -->
+              <a href="{{ url_for('historial') }}" class="btn btn-primary w-100">Ver más</a>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      </div>
+      
+      
+    </div>
+      {% endif %}
+      <div class="row marginrow">
+      {% if credencial.ventasRealizadas %}
+      <div class="col-6">
+          <div class="card">
+            <div class="card-header">
+                <h5>Ventas Realizadas</h5>
+            </div>
+            <div class="card-body">
+                
+            </div>
+        </div>
+        </div>
+      {% endif %}
+      
+      {% if credencial.prodMasVendidos %}
+      <div class="col-6">
+          <div class="card">
+            <div class="card-header">
+                <h5>Productos más Vendidos</h5>
+            </div>
+            <div class="card-body">
+                
+            </div>
+        </div>
+        </div>
+      {% endif %}
+  </div>
+      {% if credencial.productos %}
+      <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5>Productos</h5>
+              </div>
+              <div class="card-body">
+                <!-- Tabla de productos -->
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Referencia</th>
+                      <th scope="col">Producto</th>
+                      <th scope="col">Codigo</th>
+                      <th scope="col">Descripción</th>
+                      <th scope="col">Precio x Unidad</th>
+                      <th scope="col">Fecha de Ingreso</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if productos %}
+                      {% for producto in productos %}
+                        <tr>
+                          <td>
+                            <!-- Mostrar la imagen del producto con el nuevo alias -->
+                            <img src="{{ producto.imagen_url or 'ruta_por_defecto.jpg' }}" alt="Producto" style="width: 100px;">
+                          </td>
+                          <td>{{ producto.nombre }}</td>
+                          <td>{{ producto.cod }}</td>
+                          <td>{{ producto.descripcion }}</td>
+                          <td>${{ producto.precioVenta }}</td>
+                          <td>{{ producto.fechaAlta }}</td>
+                        </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr>
+                        <td colspan="8" class="text-center">No hay productos existentes.</td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+                
+        
+                <!-- Botón Ver más -->
+                <a href="{{ url_for('productosConfig') }}" class="btn btn-primary w-100">Ver más</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      
+      {% if credencial.pedidos %}
+      <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                  <h5>Pedidos</h5>
+              </div>
+              <div class="card-body">
+                  <!-- Tabla de Movimientos -->
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th scope="col">ID Pedido</th>
+                              <th scope="col">Estado</th>
+                              <th scope="col">Nombre</th>
+                              <th scope="col">Telefono</th>
+                              <th scope="col">Total</th>
+                              <th scope="col">Fecha</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% if pedidos %}
+                          {% for pedido in pedidos %}
+                          <tr>
+                              <td>{{ pedido.pedido_id }}</td>
+                              <td>{{ pedido.estadoAtencion }}</td>
+                              <td>{{ pedido.cliente_nombre }} {{ pedido.cliente_apellido }}</td>
+                              <td>{{ pedido.telefono }}</td>
+                              <td>${{ pedido.precio_total_neto }}</td>
+                              <td>{{ pedido.fechaIngreso }} | Hora: {{ pedido.hora }}</td>
+                          </tr>
+                          {% endfor %}
+                        {% else %}
+                            <div class="alert alert-warning">No hay pedidos registrados.</div>
+                        {% endif %}
+                      </tbody>
+                  </table>
+                  <!-- Botón Ver más -->
+                  <a href="{{ url_for('pedidos') }}" class="btn btn-primary w-100">Ver más</a>
+              </div>
+          </div>
+          </div>
+        </div>>
+      {% endif %}
+  </section>
+  
+
+    <!-- Scripts adicionales -->
+    <script src="libs/jquery/jquery.min.js"></script>
+    <script src="libs/popper/popper.min.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="libs/nivo-slider/js/jquery.nivo.slider.js"></script>
+    <script src="libs/owl-carousel/owl.carousel.min.js"></script>
+    <script src="js2/theme.js"></script>
+    <script src="../static/script.js"></script>
+    <script src="../static/session.js"></script>
+    <script>
+        window.onload = verificarAcceso; // Bloquea la página si no hay sesión activa
+    </script>
+    
+
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de movimientos</title>
+
+  <!-- Incluyendo el CSS de Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Estilo para la zona de arrastre de imagen -->
+  <style>
+    .drag-area {
+      width: 100%;
+      height: 200px;
+      border: 2px dashed #007bff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    .drag-area.hover {
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+    .drag-area img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .file-input {
+      display: none;
+    }
+
+    /* Estilo para las imágenes en la tabla */
+    .product-image {
+      width: 100px; /* Ajustar el tamaño según se necesite */
+      height: 100px;
+      object-fit: cover; /* Para que la imagen se ajuste proporcionalmente */
+      border-radius: 8px; /* Opcional: bordes redondeados */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('config') }}">Configuración de la Web</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active home" aria-current="page" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button onclick="salir()" class="btn btn-danger">Salir</button>
+          </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+  <!-- Contenido Principal -->
+  <div class="container mt-5">
+    <h2>Pedidos Existentes</h2>
+  
+    {% if pedidos %}
+        {% for pedido in pedidos %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Pedido #{{ pedido['pedido_id'] }} - Código: {{ pedido['codigo_pedido'] }}</h3>
+                <p>Cliente: {{ pedido['cliente_nombre'] }} {{ pedido['cliente_apellido'] }}</p>
+                <p>Fecha: {{ pedido['fechaIngreso'] }} | Hora: {{ pedido['hora'] }}</p>
+                <p>Estado del Pedido: <strong>{{ pedido['estadoPedido'] }}</strong></p>
+                <p>Estado de Atención: <strong>{{ pedido['estadoAtencion'] }}</strong></p>
+                <h4 class="text-end">Total Neto: ${{ pedido['precio_total_neto'] }}</h4>
+            </div>
+            
+            <div class="card-body">
+                <h5>Productos en el Pedido:</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Artículo</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for producto in pedido['productos'] %}
+                      <tr id="producto-{{ producto['producto_id'] }}">
+                        <td><img src="{{ producto['imagen'] }}" alt="{{ producto['nombreProducto'] }}" class="product-image"></td>
+                        <td>{{ producto['nombreProducto'] }}</td>
+                        <td>
+                          <form action="/actualizar_productoP" method="POST">
+                            <input type="number" class="form-control cantidad-input" name="cantidad" value="{{ producto['cantidad'] }}">
+                            <input type="hidden" name="producto_id" value="{{ producto['producto_id'] }}">
+                            <input type="hidden" name="pedido_id" value="{{ pedido['pedido_id'] }}">
+                            <button type="submit" class="btn btn-success mt-2">Actualizar</button>
+                          </form>
+                        </td>
+                        <td>${{ producto['precio'] }}</td>
+                        <td>${{ producto['cantidad'] * producto['precio'] }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="/generar_pdf/{{ pedido['pedido_id'] }}/{{ pedido['cliente_id'] }}" class="btn btn-primary">Generar PDF del Cliente</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning">No hay pedidos registrados.</div>
+    {% endif %}
+  </div>
+  
+
+  
+
+  <!-- Incluyendo los scripts de Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/session.js"></script>
+  <script>
+      window.onload = verificarAcceso; // Bloquea la página si no hay sesión activa
+  </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+</body>
+</html>

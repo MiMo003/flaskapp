@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Banner</title>
+</head>
+<body>
+    <h1>Agregar Nuevo Banner</h1>
+    <form action="{{ url_for('agregar_banner') }}" method="POST">
+        <label for="carrusel1">Carrusel 1:</label>
+        <input type="text" name="carrusel1" required><br>
+
+        <label for="carrusel2">Carrusel 2:</label>
+        <input type="text" name="carrusel2" required><br>
+
+        <label for="carrusel3">Carrusel 3:</label>
+        <input type="text" name="carrusel3" required><br>
+
+        <label for="banner">Banner:</label>
+        <input type="text" name="banner" required><br>
+
+        <button type="submit">Guardar Banner</button>
+    </form>
+    <a href="{{ url_for('banners') }}">Volver a la lista de banners</a>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario con Stock</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .stock-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .stock {
+            margin: 0 10px;
+            font-size: 20px;
+        }
+
+        .submit-button {
+            background-color: #28a745;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            margin-right: 10px; /* Espacio entre botones */
+        }
+
+        .close-button {
+            background-color: #dc3545;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>¿Estás seguro de que quieres agregar al carrito el producto: {{ producto_nombre }} - {{ modelo_nombre }}?</h2>
+        
+        <form id="pedidoForm" action="{{ url_for('agregarPedido') }}" method="POST">
+            <input type="hidden" name="producto_id" value="{{ producto_id }}">
+            <input type="hidden" name="modelo_id" value="{{ request.args.get('modelo_id') }}">
+    
+            <div class="stock-container">
+                <h4>Ingresar cantidad deseada:</h4>
+                <button type="button" class="btn btn-danger" onclick="actualizarStock(-1)">-</button>
+                <span class="stock" id="stock">1</span>
+                <button type="button" class="btn btn-success" onclick="actualizarStock(1)">+</button>
+                <input type="hidden" id="cantidadInput" name="cantidad" value="1">
+            </div>
+    
+            <div>
+                <button type="submit" class="submit-button">Pedir</button>
+                <a class="close-button" href="{{ url_for('producto', id=producto_id) }}">Cerrar</a>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        function actualizarStock(valor) {
+            let stockElement = document.getElementById("stock");
+            let cantidadInput = document.getElementById("cantidadInput");
+            let cantidad = parseInt(stockElement.innerText);
+    
+            // Evita números negativos
+            cantidad = Math.max(1, cantidad + valor);
+    
+            stockElement.innerText = cantidad;
+            cantidadInput.value = cantidad;
+        }
+    </script>
+
+</body>
+</html>
