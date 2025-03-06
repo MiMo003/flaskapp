@@ -162,27 +162,25 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def crear_credencial():
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM credencial LIMIT 1")  # Se hace una consulta más eficiente para solo obtener una fila
+        cursor.execute("SELECT * FROM credencial LIMIT 1")
         existe = cursor.fetchone()
 
-        if not existe:  # Si no existe, lo creamos
+        if not existe:
             password = 'root'
-            hashed_password = encrypt_password(password)  # Encripta la contraseña
-            hashed_password = hashed_password.decode('utf-8')  # Convierte a string
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             
             cursor.execute(
                 """INSERT INTO credencial 
                 (nombre, color, password, usuarios, permisos, 
                 banners, categorias, promociones, historial, 
-                ventasrealizadas, prodmasvendidos, productos, pedidos) 
+                ventasRealizadas, prodMasVendidos, productos, pedidos) 
                 VALUES 
                 (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""", 
-                ('Admin', '#005919', hashed_password, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+                ('Admin', '#005919', hashed_password, True, True, True, True, True, True, True, True, True, True)
             )
             connection.commit()
 
     connection.close()
-
 # Llamar la función para crear la credencial
 crear_credencial()
 
@@ -798,38 +796,17 @@ def gestionar_credenciales():
     finally:
         connection.close()
 
-@app.route('/crear_credencial', methods=['POST'])
-def crear_credencial():
-    nombre = request.form.get("nombre")
-    color = request.form.get("color")
-    password = request.form.get("password")
-
-    permisos = {permiso: request.form.get(permiso) is not None for permiso in [
-        "usuarios", "permisos", "banners", "categorias", "promociones", "historial",
-        "productos", "ventasRealizadas", "prodMasVendidos", "pedidos"
-    ]}
-
-    if not nombre or not password:
-        return redirect(url_for('gestionar_credenciales', error="Nombre y contraseña son obligatorios."))
-
+# Ruta para mostrar las credenciales existentes
+@app.route('/gestionar_credenciales')
+def gestionar_credenciales():
     try:
-        # Encriptar la contraseña
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
-
         connection = get_db_connection()
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                INSERT INTO credencial (nombre, color, password, usuarios, permisos, banners, 
-                                        categorias, promociones, historial, ventasRealizadas, 
-                                        prodMasVendidos, productos, pedidos)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (nombre, color, hashed_password, *permisos.values()))
-            connection.commit()
-
-        return redirect(url_for('gestionar_credenciales'))
+        with connection.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute("SELECT * FROM credencial")
+            credenciales = cursor.fetchall()
+        return render_template('credenciales.html', credenciales=credenciales)
     except Exception as e:
-        return redirect(url_for('gestionar_credenciales', error=str(e)))
+        return render_template('credenciales.html', credenciales=[], error=str(e))
     finally:
         connection.close()
 
